@@ -83,8 +83,8 @@ class Letter extends Component {
       }
 
       else if(wWidth < 550) {
-        width = 35;
-        height = 35;
+        width = 40;
+        height = 40;
         fontSize = 15;
         numberFontSize = 6;
       }
