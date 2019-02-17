@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import LetterCanvas from './splashScreen/letter/LetterCanvas';
 import { Icon, Sidebar, Popup } from 'semantic-ui-react';
+import {
+  Route,
+  Switch,
+  Redirect,
+  withRouter,
+} from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
@@ -16,17 +22,20 @@ class App extends Component {
   }
 
   openSidebar = () => {
-    console.log(this.state)
     this.setState({
       sidebarOpen: true
-    })
+    });
   }
 
   closeSidebar = () => {
-    console.log(this.state)
     this.setState({
       sidebarOpen: false
-    })
+    });
+  }
+
+  setRoute = (route) => {
+    this.props.history.push('/' + route);
+    this.closeSidebar();
   }
 
   render() {
@@ -43,22 +52,23 @@ class App extends Component {
     ]
     const navIcons = navIconNames.map((iconName, index) => {
       return(
-        <div>
-          <Popup
-            trigger={
-              <Icon
-              link
-              name={iconName}
-              style={styles.navIcon}/>
-            }
-            content={titles[index]}
-            size="mini"
-            basic
-            inverted
-            horizontalOffset={10}
-            position='left center'
-          />
-        </div>
+        <Popup
+          key={iconName+index}
+          trigger={
+            <Icon
+            link
+            name={iconName}
+            onClick={() => {this.setRoute(titles[index].toLowerCase())}}
+            style={styles.navIcon}>
+            </Icon>
+          }
+          content={titles[index]}
+          size="mini"
+          basic
+          inverted
+          horizontalOffset={10}
+          position='left center'
+        />
       )
     });
     return (
@@ -67,7 +77,6 @@ class App extends Component {
         onClick={() => {this.openSidebar()}}
         className={this.state.sidebarOpen ? 'menuIconOpen fadeOut' : 'menuIconOpen fadeIn'}
         name="bars"/>
-        <LetterCanvas/>
         <Sidebar
           className="menuSideBar"
           animation='scale down'
@@ -83,6 +92,15 @@ class App extends Component {
           {navIcons}
           </div>
         </Sidebar>
+        <Switch>
+          <Route path="/home" exact component={LetterCanvas} />
+          <Route path='/' exact>
+            <Redirect to="home" />
+          </Route>
+          <Route path="/me" component={LetterCanvas} />
+          <Route path="/contact" component={LetterCanvas} />
+          <Route component={LetterCanvas} />
+        </Switch>
       </div>
     );
   }
@@ -104,4 +122,4 @@ const styles = {
   }
 }
 
-export default App;
+export default withRouter(App);
