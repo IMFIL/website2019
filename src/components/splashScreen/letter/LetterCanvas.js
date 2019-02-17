@@ -114,7 +114,7 @@ class LetterCanvas extends Component {
     })
     return (
       <div style={{height: "100%", width: "100%", position: "relative"}}>
-        <Canvas/>
+        <Canvas canvasType="home"/>
         <div style={styles.appContainer}>
           <div style={styles.lettersContainer}>
             {letters}
