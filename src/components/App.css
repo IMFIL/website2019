@@ -1,0 +1,37 @@
+.menuSideBar {
+  background-color: #151515;
+  position: relative;
+  width: 250px !important;
+}
+
+.menuIconOpen {
+  color: #FFF;
+  width: 10px;
+  height: 5px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 17px !important;
+  z-index: 1000;
+}
+
+.menuIconClose {
+  color: #FFF;
+  width: 10px;
+  height: 5px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 17px !important;
+  z-index: 1000;
+}
+
+.fadeIn{
+     opacity:1 !important;
+     transition: opacity 0.5s;
+}
+
+.fadeOut{
+     opacity:0 !important;
+     transition: opacity 0.5s;
+}

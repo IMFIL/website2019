@@ -1,0 +1,41 @@
+body {
+  background-color: #121212 !important;
+}
+
+#root {
+  height: 100%
+}
+
+.wowGreatJobYouFoundIt>input:focus{
+  outline: none !important;
+  border: none !important;
+}
+
+.wowGreatJobYouFoundIt>input{
+  caret-color: white;
+  color: white !important;
+  background-color: rgba(18, 18, 18, 0.6) !important;
+}
+
+
+.wowGreatJobYouFoundIt {
+  border: 1px #0D14ED solid;
+  border-radius: 0.3em;
+  height: 40px;
+  width: 150px;
+  position: absolute !important;
+  top: calc(60% - (40px / 2));
+  left: calc(50% - (150px / 2));
+}
+
+.resetLettersButton {
+  color: #0D14ED !important;
+  background: transparent !important;
+  box-shadow: 0 0 0 1.5px #0D14ED inset!important;
+}
+
+.resetLettersButton:hover {
+  background: #0D14ED !important;
+  color: #FFF !important;
+  box-shadow: 0 0 0 2px #0D14ED inset!important;
+}
