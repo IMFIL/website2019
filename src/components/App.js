@@ -33,14 +33,12 @@ class App extends Component {
     const navIconNames = [
       "home",
       "id card",
-      "pen square",
       "coffee"
     ];
 
     const titles = [
       "Home",
       "Me",
-      "Experience",
       "Contact"
     ]
     const navIcons = navIconNames.map((iconName, index) => {
