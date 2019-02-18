@@ -27,8 +27,7 @@ class LetterCanvas extends Component {
       displayName: originalName,
       displayNumbers: originalNumbers,
       clickedLetters: {},
-      hiddenInputText: "",
-      letterType: "bounce"
+      hiddenInputText: ""
     }
   }
   handleLetterMovement = (letterId, movementRef) => {
@@ -56,16 +55,13 @@ class LetterCanvas extends Component {
         requiresUpdatedLetters: true,
         hiddenInputText: "",
         clickedLetters: {},
-        displayName: "F05T".split(""),
+        displayName: "F05T§".split(""),
         displayNumbers: originalNumbers,
       }, () => {
         this.setState({
           requiresUpdatedLetters: false
         }, () => {
-          this.props.easterEggAction("F05T");
-          this.setState({
-            letterType: "oscilate"
-          })
+          this.props.easterEggAction("F05T§", "oscilate");
         })
       })
       return true;
@@ -118,9 +114,7 @@ class LetterCanvas extends Component {
       this.setState({
         requiresUpdatedLetters: false
       }, () => {
-        this.setState({
-          letterType: "oscilate"
-        })
+        this.props.handleLetterTypeChange("oscilate");
       })
     })
   }
@@ -130,13 +124,13 @@ class LetterCanvas extends Component {
         key: letter+index,
         number: this.state.displayNumbers[index],
         letter: letter,
-        type: this.state.letterType
+        type: this.props.letterType
       }
-      if(this.state.letterType === "oscilate") {
+      if(this.props.letterType === "oscilate") {
         propsNeeded.angle = Math.PI*2/this.state.displayName.length * index;
       }
 
-      else if(this.state.letterType === "bounce") {
+      else if(this.props.letterType === "bounce") {
         propsNeeded.requiresUpdatedLetters = this.state.requiresUpdatedLetters;
         propsNeeded.handleLetterMovement=this.handleLetterMovement;
       }

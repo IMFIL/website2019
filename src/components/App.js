@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import LetterCanvas from './splashScreen/letter/LetterCanvas';
+import AboutMe from './aboutMe/AboutMe';
+
 import { Icon, Sidebar, Popup } from 'semantic-ui-react';
 import {
   Route,
@@ -35,12 +37,13 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.easterEggKeys = ["F05T"];
+    this.easterEggKeys = ["F05T§"];
 
     this.state = {
       sidebarOpen: false,
       easterEggUnlocked: false,
-      easterEggSteps: []
+      easterEggSteps: [],
+      letterType: "bounce"
     }
   }
 
@@ -59,12 +62,18 @@ class App extends Component {
     });
   }
 
+  handleLetterTypeChange = (type) => {
+    this.setState({
+      letterType: type
+    })
+  }
+
   setRoute = (route) => {
-    this.props.history.push('/' + route);
+    this.props.history.push('/' + route.toLowerCase());
     this.closeSidebar();
   }
 
-  easterEggAction = (val) => {
+  easterEggAction = (val, type) => {
     let foundKeys = this.state.easterEggSteps;
     foundKeys.push(val);
     let easterEggUnlocked = false;
@@ -73,7 +82,8 @@ class App extends Component {
     }
     this.setState({
       easterEggSteps: foundKeys,
-      easterEggUnlocked
+      easterEggUnlocked,
+      letterType: type
     })
   }
 
@@ -120,7 +130,7 @@ class App extends Component {
       )
     });
     return (
-      <div style={{height: "100%", width: "100%", position: "relative"}}>
+      <div style={styles.parentContainer}>
         <Icon
         onClick={() => {this.openSidebar()}}
         className={this.state.sidebarOpen ? 'menuIconOpen fadeOut' : 'menuIconOpen fadeIn'}
@@ -142,13 +152,22 @@ class App extends Component {
         </Sidebar>
         <Switch>
           <Route path="/home" exact
-          render={(props) => <LetterCanvas {...props} easterEggAction={this.easterEggAction}/>}/>
+          render={(props) => {
+            return(
+              <LetterCanvas {...props}
+              letterType={this.state.letterType}
+              handleLetterTypeChange={this.handleLetterTypeChange}
+              easterEggAction={this.easterEggAction}/>
+            )
+          }}/>
           <Route path='/' exact>
             <Redirect to="home" />
           </Route>
-          <Route path="/me" component={LetterCanvas} />
-          <Route path="/contact" component={LetterCanvas} />
-          <Route component={LetterCanvas} />
+          <Route path="/me" component={AboutMe} />
+          <Route path="/contact" component={AboutMe} />
+          <Route>
+            <Redirect to="home" />
+          </Route>
         </Switch>
       </div>
     );
@@ -156,6 +175,13 @@ class App extends Component {
 }
 
 const styles = {
+  parentContainer: {
+    height: "100%",
+    width: "100%",
+    position: "relative",
+    display: "flex",
+    justifyContent: "center"
+  },
   sidebarContentContainer: {
     height: "100%",
     width: "100%",

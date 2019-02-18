@@ -24,12 +24,18 @@ export default class HomeCanvas {
 
     this.init();
     window.USER_CAN_TOUCH = false;
-    window.addEventListener('mousemove', (event) => {this.trackMouse(event)});
-    window.addEventListener('touchstart', (event) => {this.onFirstTouch(event)}, false);
+    window.addEventListener('mousemove', this.trackMouse);
+    window.addEventListener('touchstart', this.onFirstTouch);
 
     window.setTimeout(() => {
-      window.removeEventListener('touchstart', this.onFirstTouch, false);
+      window.removeEventListener('touchstart', this.onFirstTouch);
     },  60000);
+  }
+
+  removeListeners = () => {
+    console.log("here")
+    window.removeEventListener('mousemove', this.trackMouse);
+    window.removeEventListener('touchstart', this.onFirstTouch);
   }
 
 

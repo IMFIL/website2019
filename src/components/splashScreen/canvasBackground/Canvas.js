@@ -12,9 +12,14 @@ class Canvas extends React.Component {
     this.canvas = null;
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+    this.canvas.removeListeners();
+  }
+
   componentDidMount() {
     //Adding the handler for resizing
-    window.addEventListener("resize", () => this.handleResize());
+    window.addEventListener("resize", this.handleResize);
     //Drawing context of the canvas
     this.c = this.canvasRef.current.getContext('2d');
     //Manually sizing the canvas

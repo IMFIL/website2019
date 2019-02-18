@@ -47,10 +47,14 @@ class Letter extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
     componentDidMount() {
       this.setupType();
-      this.adjustSizes();
-      window.addEventListener("resize", () => this.adjustSizes());
+      this.handleResize();
+      window.addEventListener("resize", this.handleResize);
     }
 
     componentDidUpdate(prevProps) {
@@ -123,7 +127,7 @@ class Letter extends Component {
       });
     }
 
-    adjustSizes = () => {
+    handleResize = () => {
       const wWidth = window.innerWidth;
 
       let width = 70;
