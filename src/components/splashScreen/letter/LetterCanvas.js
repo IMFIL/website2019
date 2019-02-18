@@ -5,7 +5,7 @@ import { Button, Icon, Input } from 'semantic-ui-react';
 import './LetterCanvas.css';
 import anime from 'animejs';
 
-const originalName = "FILIP".split("");
+const originalName = "filip".toUpperCase().split("");
 
 const originalNumbers = [
   9,
@@ -27,7 +27,8 @@ class LetterCanvas extends Component {
       displayName: originalName,
       displayNumbers: originalNumbers,
       clickedLetters: {},
-      hiddenInputText: ""
+      hiddenInputText: "",
+      letterType: "bounce"
     }
   }
   handleLetterMovement = (letterId, movementRef) => {
@@ -47,8 +48,37 @@ class LetterCanvas extends Component {
     })
   }
 
+  checkForEasterEgg = (val) => {
+    if(val === "SINE") {
+      this.setState({
+        resetLettersEnabled: false,
+        enableUserNameInput: false,
+        requiresUpdatedLetters: true,
+        hiddenInputText: "",
+        clickedLetters: {},
+        displayName: "F05T".split(""),
+        displayNumbers: originalNumbers,
+      }, () => {
+        this.setState({
+          requiresUpdatedLetters: false
+        }, () => {
+          this.props.easterEggAction("F05T");
+          this.setState({
+            letterType: "oscilate"
+          })
+        })
+      })
+      return true;
+    }
+    return false;
+  }
+
   handleHiddenInputChange = (event) => {
     this.deleteAnimeRef();
+
+    if(this.checkForEasterEgg(event.target.value)) {
+      return;
+    }
 
     const value = event.target.value.trim().replace(/\s/g, '').toUpperCase();
     const name = value.split("");
@@ -83,21 +113,32 @@ class LetterCanvas extends Component {
       hiddenInputText: "",
       clickedLetters: {},
       displayName: originalName,
-      displayNumbers: originalNumbers
+      displayNumbers: originalNumbers,
     }, () => {
-      this.setState({requiresUpdatedLetters: false})
+      this.setState({
+        requiresUpdatedLetters: false
+      })
     }
   )
   }
   render() {
     const letters = this.state.displayName.map((letter, index) => {
+      let propsNeeded = {
+        key: letter+index,
+        number: this.state.displayNumbers[index],
+        letter: letter,
+        type: this.state.letterType
+      }
+      if(this.state.letterType === "oscilate") {
+        propsNeeded.angle = Math.PI*2/this.state.displayName.length * index;
+      }
+
+      else if(this.state.letterType === "bounce") {
+        propsNeeded.requiresUpdatedLetters = this.state.requiresUpdatedLetters;
+        propsNeeded.handleLetterMovement=this.handleLetterMovement;
+      }
       return(
-        <Letter
-        key={letter+index}
-        requiresUpdatedLetters={this.state.requiresUpdatedLetters}
-        number={this.state.displayNumbers[index]}
-        letter={letter}
-        handleLetterMovement={this.handleLetterMovement}/>
+        <Letter {...propsNeeded}/>
       )
     })
     return (

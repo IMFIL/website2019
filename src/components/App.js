@@ -9,12 +9,38 @@ import {
   withRouter,
 } from "react-router-dom";
 
+const compare = (arr1, arr2) => {
+    if (!arr1 || !arr2){
+      return false;
+    }
+
+    if (arr1.length !== arr2.length){
+      return false;
+    }
+
+    for (var i = 0, l=arr1.length; i < l; i++) {
+        if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
+            if (!arr1[i].equals(arr2[i])){
+              return false;
+            }
+        }
+        else if (arr1[i] !== arr2[i]) {
+          return false;
+        }
+    }
+    return true;
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
 
+    this.easterEggKeys = ["F05T"];
+
     this.state = {
-      sidebarOpen: false
+      sidebarOpen: false,
+      easterEggUnlocked: false,
+      easterEggSteps: []
     }
   }
 
@@ -38,31 +64,53 @@ class App extends Component {
     this.closeSidebar();
   }
 
-  render() {
-    const navIconNames = [
-      "home",
-      "id card",
-      "coffee"
-    ];
+  easterEggAction = (val) => {
+    let foundKeys = this.state.easterEggSteps;
+    foundKeys.push(val);
+    let easterEggUnlocked = false;
+    if(compare(foundKeys,this.easterEggKeys)) {
+      easterEggUnlocked = true;
+    }
+    this.setState({
+      easterEggSteps: foundKeys,
+      easterEggUnlocked
+    })
+  }
 
-    const titles = [
-      "Home",
-      "Me",
-      "Contact"
-    ]
-    const navIcons = navIconNames.map((iconName, index) => {
+  render() {
+    const navIconNames = {
+      "Home": {
+        id: "home",
+        disabled: false
+      },
+      "Me": {
+        id: "id card",
+        disabled: false
+      },
+      "Contact": {
+        id: "coffee",
+        disabled: false
+      },
+      "CC": {
+        id: "cube",
+        disabled: !this.state.easterEggUnlocked
+      }
+    }
+    const navIcons = Object.keys(navIconNames).map((icon, index) => {
       return(
         <Popup
-          key={iconName+index}
+          key={navIconNames[icon].id+index}
+          disabled={navIconNames[icon].disabled}
           trigger={
             <Icon
-            link
-            name={iconName}
-            onClick={() => {this.setRoute(titles[index].toLowerCase())}}
+            link={!navIconNames[icon].disabled}
+            disabled={navIconNames[icon].disabled}
+            name={navIconNames[icon].id}
+            onClick={() => {this.setRoute(icon)}}
             style={styles.navIcon}>
             </Icon>
           }
-          content={titles[index]}
+          content={icon}
           size="mini"
           basic
           inverted
@@ -93,7 +141,8 @@ class App extends Component {
           </div>
         </Sidebar>
         <Switch>
-          <Route path="/home" exact component={LetterCanvas} />
+          <Route path="/home" exact
+          render={(props) => <LetterCanvas {...props} easterEggAction={this.easterEggAction}/>}/>
           <Route path='/' exact>
             <Redirect to="home" />
           </Route>

@@ -32,6 +32,7 @@ class Letter extends Component {
 
     this.previousX = 0;
     this.previousY = 0;
+    this.angle = props.angle;
 
     this.newX = 0;
     this.newY = 0;
@@ -47,33 +48,79 @@ class Letter extends Component {
   }
 
     componentDidMount() {
-      this.moveThroughSpace();
-      this.letterAnimation.pause();
+      this.setupType();
       this.adjustSizes();
-
       window.addEventListener("resize", () => this.adjustSizes());
     }
 
     componentDidUpdate(prevProps) {
-      if(prevProps.requiresUpdatedLetters && !this.props.requiresUpdatedLetters) {
-        this.newX = 0;
-        this.newY = 0;
-
-        anime({
-          targets: this.divRef.current,
-          translateX: 0,
-          translateY: 0,
-          duration: 1000,
-          loop: false,
-          autostart: true,
-        });
-
-        this.setState(
-          {
-            clicked: false,
-          }
-        );
+      if(prevProps.type !== this.props.type) {
+        this.setupType();
       }
+
+      if(this.props.type === "bounce") {
+        if(prevProps.requiresUpdatedLetters && !this.props.requiresUpdatedLetters) {
+          this.newX = 0;
+          this.newY = 0;
+
+          anime({
+            targets: this.divRef.current,
+            translateX: 0,
+            translateY: 0,
+            duration: 1000,
+            loop: false,
+            autostart: true,
+          });
+
+          this.setState(
+            {
+              clicked: false,
+            }
+          );
+        }
+      }
+    }
+
+    setupType = () => {
+      if(this.props.type === "oscilate") {
+        this.angle = this.props.angle;
+        this.previousX  = 0;
+        this.oscilate();
+      }
+      else if(this.props.type === "bounce") {
+        this.moveThroughSpace();
+        this.letterAnimation.pause();
+      }
+    }
+
+    oscilate = () => {
+      anime({
+        targets: this.divRef.current,
+        translateX: 0,
+        translateY: Math.sin(this.angle) * 10,
+        duration: 4000,
+        loop: false,
+        autostart: false,
+        easing: 'easeInOutSine',
+        complete: () => {
+          this._oscilate();
+        }
+      });
+    }
+
+    _oscilate = () => {
+      anime({
+        targets: this.divRef.current,
+        translateX: this.previousX,
+        translateY: Math.sin(this.angle) * 10,
+        duration: 0,
+        loop: false,
+        autostart: false,
+        complete: () => {
+          this.angle += Math.PI/180*4;
+          this._oscilate();
+        }
+      });
     }
 
     adjustSizes = () => {
@@ -167,12 +214,10 @@ class Letter extends Component {
   }
 
   handleClick = () => {
-    this.props.handleLetterMovement(this.id, this.divRef);
     if(!this.state.clicked) {
 
       this.xDirection = (Math.random() * (2 - 1) + 1) * (Math.random() >= 0.5 ? 1 : -1);
       this.yDirection = (Math.random() * (2 - 1) + 1) * (Math.random() >= 0.5 ? 1 : -1);
-
       this.letterAnimation.play();
     }
     else {
@@ -181,15 +226,12 @@ class Letter extends Component {
 
     this.setState({
       clicked: !this.state.clicked
-    });
+    }, this.props.handleLetterMovement(this.id, this.divRef));
   }
 
   render() {
-    let positionStyle = {}
-
     const letterBoxStyle = {
       ...styles.letterContainer,
-      ...positionStyle,
       width: this.state.width,
       height: this.state.height
     };
@@ -205,12 +247,19 @@ class Letter extends Component {
       fontSize: this.state.numberFontSize
     }
 
+    let propsNeeded = {
+      id: this.id,
+      ref: this.divRef,
+      style: letterBoxStyle
+    }
+
+    if(this.props.type === "bounce") {
+        propsNeeded.onClick = this.handleClick;
+    }
+
     return (
       <div
-      id={this.id}
-      onClick={this.handleClick}
-      ref={ this.divRef }
-      style={letterBoxStyle}>
+      {...propsNeeded}>
         <p style={numberStyle}>
           { this.props.number }
         </p>
@@ -253,7 +302,7 @@ const styles = {
 Letter.propTypes = {
   number: propTypes.number.isRequired,
   letter: propTypes.string.isRequired,
-  handleLetterMovement: propTypes.func.isRequired
+  handleLetterMovement: propTypes.func
 };
 
 export default Letter;
