@@ -12,6 +12,7 @@ body {
 }
 
 .wowGreatJobYouFoundIt>input{
+  text-align: center !important;
   caret-color: white;
   color: white !important;
   background-color: rgba(18, 18, 18, 0.6) !important;
