@@ -3,7 +3,7 @@ export default class HomeCanvas {
   constructor(context) {
     this.c = context;
     this.circleAmmount = 110;
-    this.distanceX = 0.0;
+    this.distanceX = 0.5;
     this.distanceY = 1.2;
     this.snakeNumber = 5;
     this.circles = [];
