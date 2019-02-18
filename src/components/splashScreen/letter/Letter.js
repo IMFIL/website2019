@@ -30,10 +30,14 @@ class Letter extends Component {
     this.xDirection = 0;
     this.yDirection = 0;
 
+    this.previousX = 0;
+    this.previousY = 0;
+
+    this.newX = 0;
+    this.newY = 0;
+
     this.state = {
       clicked: false,
-      x: 0,
-      y: 0,
       color: "#c0c0c0",
       width: 70,
       height: 70,
@@ -52,11 +56,21 @@ class Letter extends Component {
 
     componentDidUpdate(prevProps) {
       if(prevProps.requiresUpdatedLetters && !this.props.requiresUpdatedLetters) {
+        this.newX = 0;
+        this.newY = 0;
+
+        anime({
+          targets: this.divRef.current,
+          translateX: 0,
+          translateY: 0,
+          duration: 1000,
+          loop: false,
+          autostart: true,
+        });
+
         this.setState(
           {
             clicked: false,
-            x: 0,
-            y: 0,
           }
         );
       }
@@ -116,26 +130,25 @@ class Letter extends Component {
         // this.generateRandomColor();
       }
 
-    const newX = deltaX + this.state.x + this.xDirection;
-    const newY = deltaY + this.state.y + this.yDirection;
+    this.newX = deltaX + this.previousX + this.xDirection;
+    this.newY = deltaY + this.previousY + this.yDirection;
 
-    this.setState(
-      {
-        x: newX,
-        y: newY
-      },
-    this._moveThroughSpace(this.state.x, this.state.y));
+    this._moveThroughSpace();
   }
 
-  _moveThroughSpace = (newX, newY) => {
+  _moveThroughSpace = () => {
     this.letterAnimation = anime({
       targets: this.divRef.current,
-      translateX: newX,
-      translateY: newY,
+      translateX: this.newX,
+      translateY: this.newY,
       duration: 0,
       loop: false,
       autostart: false,
-      complete: () => {this.moveThroughSpace()}
+      complete: () => {
+        this.previousX = this.newX;
+        this.previousY = this.newY;
+        this.moveThroughSpace()
+      }
     });
   }
 
@@ -172,14 +185,7 @@ class Letter extends Component {
   }
 
   render() {
-    let positionStyle = {
-      left: this.state.x,
-      top: this.state.y
-    }
-
-    if(this.state.x === 0 && this.state.y === 0) {
-      positionStyle.transform = "none";
-    }
+    let positionStyle = {}
 
     const letterBoxStyle = {
       ...styles.letterContainer,
@@ -219,7 +225,7 @@ class Letter extends Component {
 
 const styles = {
   letterContainer:{
-    cursor: "pointer",
+    cursor: "default",
     width: 80,
     height: 80,
     backgroundColor: "#121212",

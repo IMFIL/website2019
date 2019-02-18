@@ -104,14 +104,58 @@ class Circle {
     this.height = height;
   }
 
-  getWidthOfExplosion = () => {
-    const x = Math.floor(Math.floor((Math.random()-0.5) * (window.innerWidth/5)) /  this.reconstructionSpeed) * this.reconstructionSpeed;
+  getSizeOfExplosion = (type) => {
+    let size = null;
+    switch(type) {
+      case "height":
+        size = window.innerHeight;
+        break;
+      case "width":
+        size = window.innerWidth;
+        break;
+      default:
+        size = window.innerWidth;
+        break;
+    }
+    const x = Math.floor(Math.floor((Math.random()-0.5) * (size/5)) /  this.reconstructionSpeed) * this.reconstructionSpeed;
     return x;
   }
 
-  getHeightOfExplosion = () => {
-    const y = Math.floor(Math.floor((Math.random()-0.5) * (window.innerHeight/5)) /  this.reconstructionSpeed) * this.reconstructionSpeed;
-    return y;
+  adjustCoordinate = (coord) => {
+    let currentCordAdjusted = null;
+    let currentCord = null;
+    switch(coord) {
+      case "x":
+        currentCordAdjusted = this.adjustedX;
+        currentCord = this.x;
+        break;
+      case "y":
+        currentCordAdjusted = this.adjustedY
+        currentCord = this.y;
+        break;
+      default:
+        currentCordAdjusted = this.adjustedX
+        currentCord = this.x;
+        break;
+    }
+    if(currentCordAdjusted !== currentCord) {
+      currentCordAdjusted= currentCordAdjusted > currentCord ? currentCordAdjusted-this.reconstructionSpeed : currentCordAdjusted+this.reconstructionSpeed;
+      if(Math.abs(currentCordAdjusted - currentCord) <= this.reconstructionSpeed) {
+        if(coord === "x") {
+          this.adjustedX = this.x;
+        }
+        else if(coord === "y") {
+          this.adjustedY = this.y;
+        }
+      }
+    }
+
+    else {
+      const propulsionX = this.getSizeOfExplosion("width");
+      const propulsionY = this.getSizeOfExplosion("height");
+      this.adjustedX += propulsionX;
+      this.adjustedY += propulsionY;
+    }
   }
 
   draw = () => {
@@ -131,41 +175,14 @@ class Circle {
     const yV = this.adjustedY - this.mouse.y;
 
     const mouseDistance = Math.sqrt( xV*xV + yV*yV );
-    if(mouseDistance <= 40) {
-      if(!window.USER_CAN_TOUCH) {
-        this.adjustedSize = this.adjustedSize >= 3 ? this.adjustedSize : this.adjustedSize + 1;
-        if(this.adjustedX !== this.x) {
-          this.adjustedX = this.adjustedX > this.x ? this.adjustedX-this.reconstructionSpeed : this.adjustedX+this.reconstructionSpeed;
-          if(Math.abs(this.adjustedX - this.x) <= this.reconstructionSpeed) {
-            this.adjustedX = this.x;
-          }
-        }
-
-        else {
-          const propulsionX = this.getWidthOfExplosion();
-          const propulsionY = this.getHeightOfExplosion();
-          this.adjustedX += propulsionX;
-          this.adjustedY += propulsionY;
-        }
-
-        if(this.adjustedY !== this.y) {
-          this.adjustedY = this.adjustedY > this.y ? this.adjustedY-this.reconstructionSpeed : this.adjustedY+this.reconstructionSpeed;
-          if(Math.abs(this.adjustedY - this.y) <= this.reconstructionSpeed) {
-            this.adjustedY = this.y;
-          }
-        }
-
-        else {
-          const propulsionX = this.getWidthOfExplosion();
-          const propulsionY = this.getHeightOfExplosion();
-          this.adjustedY += propulsionX;
-          this.adjustedX += propulsionY;
-        }
+    if(!window.USER_CAN_TOUCH) {
+      if(mouseDistance <= 20) {
+        this.adjustedSize = this.adjustedSize >= 2 ? this.adjustedSize : this.adjustedSize + 1;
+        this.adjustCoordinate("x");
+        this.adjustCoordinate("y");
       }
-    }
 
-    else {
-      if(!window.USER_CAN_TOUCH) {
+      else {
         this.adjustedSize = this.adjustedSize <= this.radius ? this.radius : this.adjustedSize - 1;
         if(this.adjustedX !== this.x) {
           this.adjustedX = this.adjustedX > this.x ? this.adjustedX-this.reconstructionSpeed : this.adjustedX+this.reconstructionSpeed;
