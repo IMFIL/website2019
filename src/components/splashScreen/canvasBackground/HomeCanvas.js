@@ -1,6 +1,7 @@
 
 export default class HomeCanvas {
   constructor(context) {
+    this.reconstructionSpeed = 4;
     this.c = context;
     this.circleAmmount = 110;
     this.distanceX = 0.5;
@@ -97,9 +98,20 @@ class Circle {
 
     this.c = parent.c;
     this.mouse = parent.mouse;
+    this.reconstructionSpeed = parent.reconstructionSpeed;
 
     this.angle = angle;
     this.height = height;
+  }
+
+  getWidthOfExplosion = () => {
+    const x = Math.floor(Math.floor((Math.random()-0.5) * (window.innerWidth/5)) /  this.reconstructionSpeed) * this.reconstructionSpeed;
+    return x;
+  }
+
+  getHeightOfExplosion = () => {
+    const y = Math.floor(Math.floor((Math.random()-0.5) * (window.innerHeight/5)) /  this.reconstructionSpeed) * this.reconstructionSpeed;
+    return y;
   }
 
   draw = () => {
@@ -119,27 +131,33 @@ class Circle {
     const yV = this.adjustedY - this.mouse.y;
 
     const mouseDistance = Math.sqrt( xV*xV + yV*yV );
-    if(mouseDistance <= 60) {
+    if(mouseDistance <= 40) {
       if(!window.USER_CAN_TOUCH) {
         this.adjustedSize = this.adjustedSize >= 3 ? this.adjustedSize : this.adjustedSize + 1;
         if(this.adjustedX !== this.x) {
-          this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
+          this.adjustedX = this.adjustedX > this.x ? this.adjustedX-this.reconstructionSpeed : this.adjustedX+this.reconstructionSpeed;
+          if(Math.abs(this.adjustedX - this.x) <= this.reconstructionSpeed) {
+            this.adjustedX = this.x;
+          }
         }
 
         else {
-          const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
-          const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
+          const propulsionX = this.getWidthOfExplosion();
+          const propulsionY = this.getHeightOfExplosion();
           this.adjustedX += propulsionX;
           this.adjustedY += propulsionY;
         }
 
         if(this.adjustedY !== this.y) {
-          this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
+          this.adjustedY = this.adjustedY > this.y ? this.adjustedY-this.reconstructionSpeed : this.adjustedY+this.reconstructionSpeed;
+          if(Math.abs(this.adjustedY - this.y) <= this.reconstructionSpeed) {
+            this.adjustedY = this.y;
+          }
         }
 
         else {
-          const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
-          const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
+          const propulsionX = this.getWidthOfExplosion();
+          const propulsionY = this.getHeightOfExplosion();
           this.adjustedY += propulsionX;
           this.adjustedX += propulsionY;
         }
@@ -150,11 +168,17 @@ class Circle {
       if(!window.USER_CAN_TOUCH) {
         this.adjustedSize = this.adjustedSize <= this.radius ? this.radius : this.adjustedSize - 1;
         if(this.adjustedX !== this.x) {
-          this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
+          this.adjustedX = this.adjustedX > this.x ? this.adjustedX-this.reconstructionSpeed : this.adjustedX+this.reconstructionSpeed;
+          if(Math.abs(this.adjustedX - this.x) <= this.reconstructionSpeed) {
+            this.adjustedX = this.x;
+          }
         }
 
         if(this.adjustedY !== this.y) {
-          this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
+          this.adjustedY = this.adjustedY > this.y ? this.adjustedY-this.reconstructionSpeed : this.adjustedY+this.reconstructionSpeed;
+          if(Math.abs(this.adjustedY - this.y) <= this.reconstructionSpeed) {
+            this.adjustedY = this.y;
+          }
         }
       }
     }
