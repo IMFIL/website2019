@@ -117,9 +117,13 @@ class LetterCanvas extends Component {
     }, () => {
       this.setState({
         requiresUpdatedLetters: false
+      }, () => {
+        this.props.easterEggAction("F05T");
+        this.setState({
+          letterType: "oscilate"
+        })
       })
-    }
-  )
+    })
   }
   render() {
     const letters = this.state.displayName.map((letter, index) => {
