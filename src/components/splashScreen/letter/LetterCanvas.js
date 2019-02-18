@@ -118,7 +118,6 @@ class LetterCanvas extends Component {
       this.setState({
         requiresUpdatedLetters: false
       }, () => {
-        this.props.easterEggAction("F05T");
         this.setState({
           letterType: "oscilate"
         })
