@@ -3,7 +3,8 @@ export default class HomeCanvas {
   constructor(context) {
     this.c = context;
     this.circleAmmount = 110;
-    this.distance = 3;
+    this.distanceX = 0.0;
+    this.distanceY = 1.2;
     this.snakeNumber = 5;
     this.circles = [];
     this.colors = [
@@ -42,15 +43,15 @@ export default class HomeCanvas {
 
   init = () => {
     this.circles = [];
-    const radius = 1.3;
-    const initialPositionX = (window.innerWidth - ((radius*2+this.distance)*this.circleAmmount))/2;
-    const initialPositionY = (window.innerHeight - radius*2)/2;
+    const radius = 1;
+    const initialPositionX = (window.innerWidth - ((radius*2+this.distanceX)*this.circleAmmount))/2;
+    const initialPositionY = (window.innerHeight - radius*2)/2 - 80;
       for(let sN = 0; sN < this.snakeNumber ; sN++){
         for(let i = 0; i < this.circleAmmount; i++){
           this.circles.push(
             new Circle(
-              initialPositionX + (radius*2+this.distance)*i,
-              sN*this.distance + initialPositionY,
+              initialPositionX + (radius*2+this.distanceX)*i,
+              sN*this.distanceY + initialPositionY,
               this.colors[sN],
               radius,
               Math.PI*2/this.circleAmmount * i,
@@ -118,7 +119,7 @@ class Circle {
     const yV = this.adjustedY - this.mouse.y;
 
     const mouseDistance = Math.sqrt( xV*xV + yV*yV );
-    if(mouseDistance <= 100) {
+    if(mouseDistance <= 60) {
       if(!window.USER_CAN_TOUCH) {
         this.adjustedSize = this.adjustedSize >= 3 ? this.adjustedSize : this.adjustedSize + 1;
         if(this.adjustedX !== this.x) {
