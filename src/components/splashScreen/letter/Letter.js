@@ -106,14 +106,14 @@ class Letter extends Component {
       position.left < 0.1) {
         deltaX = position.left <= 1 ? 10 : -10;
         this.xDirection = this.xDirection * -1;
-        this.generateRandomColor();
+        // this.generateRandomColor();
     }
 
     if(window.innerHeight - position.top < (this.state.width -1) ||
       position.top < 0.1) {
         deltaY = position.top <= 1 ? 10 : -10;
         this.yDirection = this.yDirection * -1;
-        this.generateRandomColor();
+        // this.generateRandomColor();
       }
 
     const newX = deltaX + this.state.x + this.xDirection;

@@ -2,9 +2,17 @@
 export default class HomeCanvas {
   constructor(context) {
     this.c = context;
-    this.circleAmmount = 50;
-    this.distance = 5;
+    this.circleAmmount = 110;
+    this.distance = 3;
+    this.snakeNumber = 5;
     this.circles = [];
+    this.colors = [
+      "#0d14ed",
+      "#1b22f3",
+      "#2e34f4",
+      "#4046f5",
+      "#5358f6"
+    ];
 
     this.mouse = {
       x: null,
@@ -23,22 +31,24 @@ export default class HomeCanvas {
 
   init = () => {
     this.circles = [];
-    const radius = 5;
+    const radius = 1.3;
     const initialPositionX = (window.innerWidth - ((radius*2+this.distance)*this.circleAmmount))/2;
-    const initialPositionY = (window.innerHeight - radius*2)/2
-    for(let i = 0; i < this.circleAmmount; i++){
-      this.circles.push(
-        new Circle(
-          initialPositionX + (radius*2+this.distance)*i,
-          initialPositionY,
-          "#B10DC9",
-          radius,
-          Math.PI*2/this.circleAmmount * i,
-          50,
-          this
-        )
-      );
-    }
+    const initialPositionY = (window.innerHeight - radius*2)/2;
+      for(let sN = 0; sN < this.snakeNumber ; sN++){
+        for(let i = 0; i < this.circleAmmount; i++){
+          this.circles.push(
+            new Circle(
+              initialPositionX + (radius*2+this.distance)*i,
+              sN*this.distance + initialPositionY,
+              this.colors[sN],
+              radius,
+              Math.PI*2/this.circleAmmount * i,
+              10,
+              this
+            )
+          );
+        }
+      }
   }
 
   draw = () => {
@@ -93,17 +103,45 @@ class Circle {
 
   update = () => {
     this.angle += Math.PI/180*4;
-    const xV = this.x - this.mouse.x;
-    const yV = this.y - this.mouse.y;
-    const updatedPosition = false;
+    const xV = this.adjustedX - this.mouse.x;
+    const yV = this.adjustedY - this.mouse.y;
 
     const mouseDistance = Math.sqrt( xV*xV + yV*yV );
-    if(mouseDistance <= 40) {
-      this.adjustedSize = this.adjustedSize >= 7 ? this.adjustedSize : this.adjustedSize + 1;
+    if(mouseDistance <= 100) {
+      this.adjustedSize = this.adjustedSize >= 3 ? this.adjustedSize : this.adjustedSize + 1;
+
+      if(this.adjustedX !== this.x) {
+        this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
+      }
+
+      else {
+        const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
+        const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
+        this.adjustedX += propulsionX;
+        this.adjustedY += propulsionY;
+      }
+
+      if(this.adjustedY !== this.y) {
+        this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
+      }
+
+      else {
+        const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
+        const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
+        this.adjustedY += propulsionX;
+        this.adjustedX += propulsionY;
+      }
     }
 
     else {
       this.adjustedSize = this.adjustedSize <= this.radius ? this.radius : this.adjustedSize - 1;
+      if(this.adjustedX !== this.x) {
+        this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
+      }
+
+      if(this.adjustedY !== this.y) {
+        this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
+      }
     }
 
     this.draw();

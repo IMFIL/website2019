@@ -5,14 +5,7 @@ import { Button, Icon, Input } from 'semantic-ui-react';
 import './LetterCanvas.css';
 import anime from 'animejs';
 
-const originalName = [
-  "I",
-  "M",
-  ".",
-  "F",
-  "I",
-  "L"
-];
+const originalName = "FILIP".split("");
 
 const originalNumbers = [
   9,
@@ -20,11 +13,6 @@ const originalNumbers = [
   96,
   34,
   15,
-  9,
-  453,
-  66,
-  132,
-  75,
 ];
 
 class LetterCanvas extends Component {
