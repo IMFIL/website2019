@@ -21,7 +21,18 @@ export default class HomeCanvas {
 
 
     this.init();
-    window.addEventListener('mousemove', (event) => {this.trackMouse(event)})
+    window.USER_CAN_TOUCH = false;
+    window.addEventListener('mousemove', (event) => {this.trackMouse(event)});
+    window.addEventListener('touchstart', (event) => {this.onFirstTouch(event)}, false);
+
+    window.setTimeout(() => {
+      window.removeEventListener('touchstart', this.onFirstTouch, false);
+    },  60000);
+  }
+
+
+  onFirstTouch = (event) => {
+    window.USER_CAN_TOUCH = true;
   }
 
   trackMouse = (event) => {
@@ -108,39 +119,42 @@ class Circle {
 
     const mouseDistance = Math.sqrt( xV*xV + yV*yV );
     if(mouseDistance <= 100) {
-      this.adjustedSize = this.adjustedSize >= 3 ? this.adjustedSize : this.adjustedSize + 1;
+      if(!window.USER_CAN_TOUCH) {
+        this.adjustedSize = this.adjustedSize >= 3 ? this.adjustedSize : this.adjustedSize + 1;
+        if(this.adjustedX !== this.x) {
+          this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
+        }
 
-      if(this.adjustedX !== this.x) {
-        this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
-      }
+        else {
+          const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
+          const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
+          this.adjustedX += propulsionX;
+          this.adjustedY += propulsionY;
+        }
 
-      else {
-        const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
-        const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
-        this.adjustedX += propulsionX;
-        this.adjustedY += propulsionY;
-      }
+        if(this.adjustedY !== this.y) {
+          this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
+        }
 
-      if(this.adjustedY !== this.y) {
-        this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
-      }
-
-      else {
-        const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
-        const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
-        this.adjustedY += propulsionX;
-        this.adjustedX += propulsionY;
+        else {
+          const propulsionX = Math.floor((Math.random()-0.5) * (window.innerWidth/2));
+          const propulsionY = Math.floor((Math.random()-0.5) * (window.innerHeight/5));
+          this.adjustedY += propulsionX;
+          this.adjustedX += propulsionY;
+        }
       }
     }
 
     else {
-      this.adjustedSize = this.adjustedSize <= this.radius ? this.radius : this.adjustedSize - 1;
-      if(this.adjustedX !== this.x) {
-        this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
-      }
+      if(!window.USER_CAN_TOUCH) {
+        this.adjustedSize = this.adjustedSize <= this.radius ? this.radius : this.adjustedSize - 1;
+        if(this.adjustedX !== this.x) {
+          this.adjustedX = this.adjustedX > this.x ? this.adjustedX-1 : this.adjustedX+1;
+        }
 
-      if(this.adjustedY !== this.y) {
-        this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
+        if(this.adjustedY !== this.y) {
+          this.adjustedY = this.adjustedY > this.y ? this.adjustedY-1 : this.adjustedY+1;
+        }
       }
     }
 

@@ -121,7 +121,7 @@ class LetterCanvas extends Component {
           <Input
           className="wowGreatJobYouFoundIt"
           ref={this.hiddenInputRef}
-          placeholder="And you are ?"
+          placeholder="?"
           onChange={(event) => this.handleHiddenInputChange(event)}/>
         }
       </div>
