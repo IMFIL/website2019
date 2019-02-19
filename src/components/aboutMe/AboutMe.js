@@ -100,7 +100,7 @@ class AboutMe extends Component {
 
     this.topicContent = [
       <p style={styles.meText}>
-        Co-founder and Technical lead at Noibu,
+        Co-Founder and Technical lead at Noibu,
         a startup that helps retailers create a consistent online and offline customer journey.
         Strong technical experience gained through working at IBM, Nokia and Ciena in software engineering roles.
         I am passionate about how business strategy translates into a strong technical product.
@@ -234,8 +234,8 @@ class AboutMe extends Component {
     })
     return (
       <div style={aboutMeContainerProps}>
-        <Grid stackable columns={2} padded>
-          <Grid.Column style={styles.textualContentGrid} width={8}>
+        <Grid style={styles.aboutMeGrid} stackable columns={2} padded>
+          <Grid.Column style={styles.textualContentCol} width={8}>
             <Header
             style={styles.header}
             as='h1'>
@@ -255,8 +255,11 @@ class AboutMe extends Component {
 }
 
 const styles = {
-  textualContentGrid: {
-    maxHeight: 800,
+  aboutMeGrid: {
+    height: "100%"
+  },
+  textualContentCol: {
+    maxHeight: "90%",
     overflowY: "auto",
     overflowX: "hidden"
   },
