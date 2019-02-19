@@ -235,7 +235,7 @@ class AboutMe extends Component {
     return (
       <div style={aboutMeContainerProps}>
         <Grid stackable columns={2} padded>
-          <Grid.Column width={8}>
+          <Grid.Column style={styles.textualContentGrid} width={8}>
             <Header
             style={styles.header}
             as='h1'>
@@ -255,6 +255,11 @@ class AboutMe extends Component {
 }
 
 const styles = {
+  textualContentGrid: {
+    maxHeight: 800,
+    overflowY: "auto",
+    overflowX: "hidden"
+  },
   workTextDescription: {
     fontSize: 19,
     color: "#C0C0C0",
@@ -302,7 +307,6 @@ const styles = {
   },
   aboutMeContainer: {
     marginTop: 100,
-    height: "100%",
   },
   meText: {
     fontSize: 22,

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Letter from './Letter';
-import Canvas from '../canvasBackground/Canvas';
 import { Button, Icon, Input } from 'semantic-ui-react';
 import './LetterCanvas.css';
 import anime from 'animejs';
@@ -34,7 +33,7 @@ class LetterCanvas extends Component {
   componentWillUnmount() {
     this.deleteAnimeRef();
   }
-  
+
   handleLetterMovement = (letterId, movementRef) => {
     let clickedLetters = this.state.clickedLetters;
     clickedLetters[letterId] = movementRef;
@@ -145,7 +144,6 @@ class LetterCanvas extends Component {
     })
     return (
       <div style={{height: "100%", width: "100%", position: "relative"}}>
-        <Canvas canvasType="home"/>
         <div style={styles.appContainer}>
           <div style={styles.lettersContainer}>
             {letters}

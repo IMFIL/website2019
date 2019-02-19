@@ -10,18 +10,27 @@ const generateRandomColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
-export default class PracticeCanvas {
+export default class AboutCanvas {
   constructor(context) {
-    this.circleAmmount = 800;
+    this.circleAmmount = 100;
     this.c = context;
     this.circleArray = [];
     this.mouse = {
       x: null,
       y: null
     }
+    this.req = null;
 
     this.init();
-    window.addEventListener('mousemove', (event) => {this.trackMouse(event)});
+    window.addEventListener('mousemove', this.trackMouse);
+  }
+
+  removeListeners = () => {
+    window.removeEventListener('mousemove', this.trackMouse);
+  }
+
+  stop = () => {
+    cancelAnimationFrame(this.req);
   }
 
   trackMouse = (event) => {
@@ -30,6 +39,7 @@ export default class PracticeCanvas {
   }
 
   init = () => {
+    this.circleArray = [];
     for(let i=0; i < this.circleAmmount; i++) {
       const radius = Math.floor(Math.random() * ((7 - 1) + 1));
       this.circleArray.push(
@@ -49,7 +59,7 @@ export default class PracticeCanvas {
   //loop function to redraw part of the canvas that is given in the function
   draw = () => {
     const animate = () => {
-      requestAnimationFrame(animate);
+      this.req = requestAnimationFrame(animate);
       //clears part the canvas
       // startX, startY, endX, endY
       this.c.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -111,7 +121,7 @@ class Circle {
     }
 
     if(mouseDistance <= 100) {
-      this.adjustedSize = this.adjustedSize >= 20 ? this.adjustedSize : this.adjustedSize + 1;
+      this.adjustedSize = this.adjustedSize >= 10 ? this.adjustedSize : this.adjustedSize + 1;
     }
 
     else {

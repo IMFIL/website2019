@@ -16,6 +16,9 @@ export default class HomeCanvas {
       "#5358f6"
     ];
 
+    this.req = null;
+
+
     this.mouse = {
       x: null,
       y: null
@@ -35,6 +38,10 @@ export default class HomeCanvas {
   removeListeners = () => {
     window.removeEventListener('mousemove', this.trackMouse);
     window.removeEventListener('touchstart', this.onFirstTouch);
+  }
+
+  stop = () => {
+    cancelAnimationFrame(this.req);
   }
 
 
@@ -71,7 +78,7 @@ export default class HomeCanvas {
 
   draw = () => {
     const animate = () => {
-      requestAnimationFrame(animate);
+      this.req = requestAnimationFrame(animate);
       //clears part the canvas
       // startX, startY, endX, endY
       this.c.clearRect(0, 0, window.innerWidth, window.innerHeight);

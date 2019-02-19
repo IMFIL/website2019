@@ -1,6 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import PracticeCanvas from './PracticeCanvas.js';
+import AboutCanvas from './AboutCanvas.js';
 import HomeCanvas from './HomeCanvas.js';
 
 class Canvas extends React.Component {
@@ -10,6 +10,15 @@ class Canvas extends React.Component {
     this.canvasRef = React.createRef();
     this.c = null;
     this.canvas = null;
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.canvasType !== this.props.canvasType) {
+      this.canvas.stop();
+      this.c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      this.getCanvas();
+      this.canvas.draw()
+    }
   }
 
   componentWillUnmount() {
@@ -26,20 +35,24 @@ class Canvas extends React.Component {
     this.canvasRef.current.width = window.innerWidth;
     this.canvasRef.current.height = window.innerHeight;
 
+    this.getCanvas();
+
+    //drawing on canvas
+    this.canvas.draw()
+  }
+
+  getCanvas = () => {
     switch(this.props.canvasType) {
       case("home"):
         this.canvas = new HomeCanvas(this.c);
         break;
-      case("practice"):
-        this.canvas = new PracticeCanvas(this.c);
+      case("me"):
+        this.canvas = new AboutCanvas(this.c);
         break;
       default:
-        this.canvas = new PracticeCanvas(this.c);
+        this.canvas = new HomeCanvas(this.c);
         break;
     }
-
-    //drawing on canvas
-    this.canvas.draw()
   }
 
   handleResize = () => {

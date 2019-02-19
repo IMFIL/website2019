@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import LetterCanvas from './splashScreen/letter/LetterCanvas';
+import LetterCanvas from './splashScreen/LetterCanvas';
 import AboutMe from './aboutMe/AboutMe';
+import Canvas from './canvasBackground/Canvas';
 import { Icon, Sidebar, Popup } from 'semantic-ui-react';
 import {
   Route,
@@ -42,7 +43,8 @@ class App extends Component {
       sidebarOpen: false,
       easterEggUnlocked: false,
       easterEggSteps: [],
-      letterType: "bounce"
+      letterType: "bounce",
+      currentRoute: "me"
     }
   }
 
@@ -68,6 +70,10 @@ class App extends Component {
   }
 
   setRoute = (route) => {
+    console.log(route)
+    this.setState({
+      currentRoute: route.toLowerCase()
+    })
     this.props.history.push('/' + route.toLowerCase());
     this.closeSidebar();
   }
@@ -130,6 +136,7 @@ class App extends Component {
     });
     return (
       <div style={styles.parentContainer}>
+        <Canvas canvasType={this.state.currentRoute}/>
         <Icon
         onClick={() => {this.openSidebar()}}
         className={this.state.sidebarOpen ? 'menuIconOpen fadeOut' : 'menuIconOpen fadeIn'}
