@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import LetterCanvas from './splashScreen/letter/LetterCanvas';
 import AboutMe from './aboutMe/AboutMe';
-
 import { Icon, Sidebar, Popup } from 'semantic-ui-react';
 import {
   Route,

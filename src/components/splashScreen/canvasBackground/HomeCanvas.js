@@ -33,7 +33,6 @@ export default class HomeCanvas {
   }
 
   removeListeners = () => {
-    console.log("here")
     window.removeEventListener('mousemove', this.trackMouse);
     window.removeEventListener('touchstart', this.onFirstTouch);
   }

@@ -115,7 +115,6 @@ class Letter extends Component {
     _oscilate = () => {
       anime({
         targets: this.divRef.current,
-        translateX: this.previousX,
         translateY: Math.sin(this.angle) * 10,
         duration: 0,
         loop: false,

@@ -30,6 +30,11 @@ class LetterCanvas extends Component {
       hiddenInputText: ""
     }
   }
+
+  componentWillUnmount() {
+    this.deleteAnimeRef();
+  }
+  
   handleLetterMovement = (letterId, movementRef) => {
     let clickedLetters = this.state.clickedLetters;
     clickedLetters[letterId] = movementRef;
