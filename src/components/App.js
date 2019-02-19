@@ -37,6 +37,8 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    console.log(props)
+
     this.easterEggKeys = ["F05T§"];
 
     this.state = {
@@ -44,7 +46,7 @@ class App extends Component {
       easterEggUnlocked: false,
       easterEggSteps: [],
       letterType: "bounce",
-      currentRoute: "home"
+      currentRoute: props.location.pathname.replace("/","")
     }
   }
 
@@ -108,7 +110,7 @@ class App extends Component {
       },
       "CC": {
         id: "cube",
-        disabled: !this.state.easterEggUnlocked
+        disabled: true
       }
     }
     const navIcons = Object.keys(navIconNames).map((icon, index) => {

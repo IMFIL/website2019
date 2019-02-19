@@ -1,18 +1,38 @@
 const colors = [
-  "#78FFD6",
-  "#E1FAF9",
-  "#0AD3FF",
-  "#C3979F",
-  "#023C40"
+  "#000",
+  "#121212"
 ]
 
 const generateRandomColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
+const generateInitialSettingsForCircle = () => {
+  let settings = {};
+
+  const random = Math.random();
+
+  if(random <= 0.5) {
+    settings.color = "#121212";
+    settings.radius = 50;
+  }
+
+  else if(random <= 0.83) {
+    settings.color = "#000";
+    settings.radius = 1;
+  }
+
+  else {
+    settings.color = "#0D14ED";
+    settings.radius = 0.5;
+  }
+
+  return settings;
+}
+
 export default class AboutCanvas {
   constructor(context) {
-    this.circleAmmount = 100;
+    this.circleAmmount = 50;
     this.c = context;
     this.circleArray = [];
     this.mouse = {
@@ -41,12 +61,14 @@ export default class AboutCanvas {
   init = () => {
     this.circleArray = [];
     for(let i=0; i < this.circleAmmount; i++) {
-      const radius = Math.floor(Math.random() * ((7 - 1) + 1));
+      const settings = generateInitialSettingsForCircle();
+      const radius = settings.radius;
+      const color = settings.color;
       this.circleArray.push(
         new Circle(
           Math.random() * (window.innerWidth - (radius*2)) + radius,
           Math.random() * (window.innerHeight - (radius*2)) + radius,
-          generateRandomColor(),
+          color,
           radius,
           (Math.random() - 0.5) * 2,
           (Math.random() - 0.5) * 2,
@@ -62,7 +84,7 @@ export default class AboutCanvas {
       this.req = requestAnimationFrame(animate);
       //clears part the canvas
       // startX, startY, endX, endY
-      this.c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      //this.c.clearRect(0, 0, window.innerWidth, window.innerHeight);
       this.circleArray.forEach(circle => {
         circle.update();
       });
@@ -111,22 +133,20 @@ class Circle {
     if(this.x + this.radius >= window.innerWidth ||
       this.x - this.radius <= 0) {
       this.dx *= -1;
-      this.color = generateRandomColor();
     }
 
     if(this.y + this.radius >= window.innerHeight ||
       this.y - this.radius <= 0) {
       this.dy *= -1;
-      this.color = generateRandomColor();
     }
 
-    if(mouseDistance <= 100) {
-      this.adjustedSize = this.adjustedSize >= 10 ? this.adjustedSize : this.adjustedSize + 1;
-    }
-
-    else {
-      this.adjustedSize = this.adjustedSize <= this.radius ? this.radius : this.adjustedSize - 1;
-    }
+    // if(mouseDistance <= 100) {
+    //   this.adjustedSize = this.adjustedSize >= 3 ? this.adjustedSize : this.adjustedSize + 1;
+    // }
+    //
+    // else {
+    //   this.adjustedSize = this.adjustedSize <= this.radius ? this.radius : this.adjustedSize - 1;
+    // }
 
     this.x += this.dx;
     this.y += this.dy;
