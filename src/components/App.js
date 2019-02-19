@@ -44,7 +44,7 @@ class App extends Component {
       easterEggUnlocked: false,
       easterEggSteps: [],
       letterType: "bounce",
-      currentRoute: "me"
+      currentRoute: "home"
     }
   }
 
