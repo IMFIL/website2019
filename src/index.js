@@ -7,6 +7,18 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 
+window.USER_CAN_TOUCH = false;
+const onFirstTouch = (event) => {
+  console.log("here")
+  window.USER_CAN_TOUCH = true;
+}
+
+
+window.addEventListener('touchstart', onFirstTouch);
+
+// window.setTimeout(() => {
+//   window.removeEventListener('touchstart', onFirstTouch);
+// },  60000);
 ReactDOM.render(<Router><App /></Router>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

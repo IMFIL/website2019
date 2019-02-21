@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import LetterCanvas from './splashScreen/LetterCanvas';
 import AboutMe from './aboutMe/AboutMe';
+import Contact from './contact/Contact';
 import Canvas from './canvasBackground/Canvas';
 import { Icon, Sidebar, Popup } from 'semantic-ui-react';
 import {
@@ -37,8 +38,6 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    console.log(props)
-
     this.easterEggKeys = ["F05T§"];
 
     this.state = {
@@ -46,7 +45,8 @@ class App extends Component {
       easterEggUnlocked: false,
       easterEggSteps: [],
       letterType: "bounce",
-      currentRoute: props.location.pathname.replace("/","")
+      currentRoute: props.location.pathname.replace("/",""),
+      isPopupOpen: false
     }
   }
 
@@ -73,8 +73,10 @@ class App extends Component {
 
   setRoute = (route) => {
     console.log(route)
+    console.log(document.getElementById("popup"+route));
     this.setState({
-      currentRoute: route.toLowerCase()
+      currentRoute: route.toLowerCase(),
+      isPopupOpen: false
     })
     this.props.history.push('/' + route.toLowerCase());
     this.closeSidebar();
@@ -114,10 +116,12 @@ class App extends Component {
       }
     }
     const navIcons = Object.keys(navIconNames).map((icon, index) => {
+      console.log(window.USER_CAN_TOUCH)
       return(
         <Popup
           key={navIconNames[icon].id+index}
-          disabled={navIconNames[icon].disabled}
+          on='hover'
+          disabled={navIconNames[icon].disabled || window.USER_CAN_TOUCH}
           trigger={
             <Icon
             link={!navIconNames[icon].disabled}
@@ -172,7 +176,7 @@ class App extends Component {
             <Redirect to="home" />
           </Route>
           <Route path="/me" component={AboutMe} />
-          <Route path="/contact" component={AboutMe} />
+          <Route path="/contact" component={Contact} />
           <Route>
             <Redirect to="home" />
           </Route>

@@ -26,27 +26,15 @@ export default class HomeCanvas {
 
 
     this.init();
-    window.USER_CAN_TOUCH = false;
     window.addEventListener('mousemove', this.trackMouse);
-    window.addEventListener('touchstart', this.onFirstTouch);
-
-    window.setTimeout(() => {
-      window.removeEventListener('touchstart', this.onFirstTouch);
-    },  60000);
   }
 
   removeListeners = () => {
     window.removeEventListener('mousemove', this.trackMouse);
-    window.removeEventListener('touchstart', this.onFirstTouch);
   }
 
   stop = () => {
     cancelAnimationFrame(this.req);
-  }
-
-
-  onFirstTouch = (event) => {
-    window.USER_CAN_TOUCH = true;
   }
 
   trackMouse = (event) => {

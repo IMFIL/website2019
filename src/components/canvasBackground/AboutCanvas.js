@@ -1,30 +1,28 @@
-const colors = [
-  "#000",
-  "#121212"
-]
-
-const generateRandomColor = () => {
-    return colors[Math.floor(Math.random() * colors.length)];
-}
 
 const generateInitialSettingsForCircle = () => {
   let settings = {};
 
   const random = Math.random();
 
-  if(random <= 0.5) {
+  if(random <= 0.6) {
     settings.color = "#121212";
-    settings.radius = 50;
+    settings.radius = 10;
+    settings.dx =(Math.random() - 0.5) * ((10 - 5) + 5);
+    settings.dy =(Math.random() - 0.5) * ((10 - 5) + 5);
   }
 
-  else if(random <= 0.83) {
+  else if(random <= 0.93) {
     settings.color = "#000";
-    settings.radius = 1;
+    settings.radius = 0.5;
+    settings.dx =(Math.random() - 0.5) * ((2 - 1) + 1);
+    settings.dy =(Math.random() - 0.5) * ((2 - 1) + 1);
   }
 
   else {
     settings.color = "#0D14ED";
     settings.radius = 0.5;
+    settings.dx =(Math.random() - 0.5) * ((2 - 1) + 1);
+    settings.dy =(Math.random() - 0.5) * ((2 - 1) + 1);
   }
 
   return settings;
@@ -32,7 +30,7 @@ const generateInitialSettingsForCircle = () => {
 
 export default class AboutCanvas {
   constructor(context) {
-    this.circleAmmount = 50;
+    this.circleAmmount = 100;
     this.c = context;
     this.circleArray = [];
     this.mouse = {
@@ -64,14 +62,17 @@ export default class AboutCanvas {
       const settings = generateInitialSettingsForCircle();
       const radius = settings.radius;
       const color = settings.color;
+      const dx = settings.dx;
+      const dy = settings.dy;
+
       this.circleArray.push(
         new Circle(
           Math.random() * (window.innerWidth - (radius*2)) + radius,
           Math.random() * (window.innerHeight - (radius*2)) + radius,
           color,
           radius,
-          (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 2,
+          dx,
+          dy,
           this
         )
       );

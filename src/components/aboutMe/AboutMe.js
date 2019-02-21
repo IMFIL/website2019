@@ -124,7 +124,8 @@ class AboutMe extends Component {
 
     this.state = {
       width: "70%",
-      currentTopic: 0
+      currentTopic: 0,
+      maxHeight: "90%",
     };
   }
 
@@ -182,7 +183,8 @@ class AboutMe extends Component {
 
   handleResize = () => {
     const wWidth = window.innerWidth;
-    let width = "70%"
+    let width = "70%";
+    let maxHeight = "90%";
 
     if(wWidth >= 550 && wWidth <= 1000) {
       width = "85%"
@@ -192,8 +194,13 @@ class AboutMe extends Component {
       width = "90%"
     }
 
+    if(wWidth <= 765) {
+      maxHeight = "fit-content";
+    }
+
     this.setState({
       width,
+      maxHeight
     })
   }
 
@@ -205,6 +212,11 @@ class AboutMe extends Component {
       ...styles.aboutMeContainer,
       width: this.state.width
     };
+
+    const textualContentCol = {
+      ...styles.textualContentCol,
+      maxHeight: this.state.maxHeight
+    }
 
     const topics = this.topicTexts.map((topic, index) => {
       let borderColorStyle = {
@@ -235,7 +247,7 @@ class AboutMe extends Component {
     return (
       <div style={aboutMeContainerProps}>
         <Grid style={styles.aboutMeGrid} stackable columns={2} padded>
-          <Grid.Column style={styles.textualContentCol} width={8}>
+          <Grid.Column style={textualContentCol} width={8}>
             <Header
             style={styles.header}
             as='h1'>
@@ -259,8 +271,6 @@ const styles = {
     height: "100%"
   },
   textualContentCol: {
-    maxHeight: "90%",
-    overflowY: "auto",
     overflowX: "hidden"
   },
   workTextDescription: {
