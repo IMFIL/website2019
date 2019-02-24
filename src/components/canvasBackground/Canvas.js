@@ -14,10 +14,14 @@ class Canvas extends React.Component {
 
   componentDidUpdate(prevProps) {
     if(prevProps.canvasType !== this.props.canvasType) {
-      this.canvas.stop();
+      if(this.canvas) {
+        this.canvas.stop();
+      }
       this.c.clearRect(0, 0, window.innerWidth, window.innerHeight);
       this.getCanvas();
-      this.canvas.draw()
+      if(this.canvas) {
+        this.canvas.draw();
+      }
     }
   }
 
@@ -38,7 +42,9 @@ class Canvas extends React.Component {
     this.getCanvas();
 
     //drawing on canvas
-    this.canvas.draw()
+    if(this.canvas) {
+      this.canvas.draw();
+    }
   }
 
   getCanvas = () => {
@@ -50,7 +56,7 @@ class Canvas extends React.Component {
         this.canvas = new AboutCanvas(this.c);
         break;
       default:
-        this.canvas = new HomeCanvas(this.c);
+        this.canvas = null;
         break;
     }
   }
@@ -58,8 +64,9 @@ class Canvas extends React.Component {
   handleResize = () => {
     this.canvasRef.current.width = window.innerWidth;
     this.canvasRef.current.height = window.innerHeight;
-
-    this.canvas.resize();
+    if(this.canvas) {
+      this.canvas.resize();
+    }
   }
   render() {
     return(
