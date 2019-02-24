@@ -102,6 +102,7 @@ class Contact extends Component {
                 error={this.state.failed}
               >
                 <Form.Field
+                  required
                   control={Input}
                   label="Email:"
                   name="email"
