@@ -40,12 +40,17 @@ class App extends Component {
 
     this.easterEggKeys = ["F05T§"];
 
+    const initialRoute = props.location.pathname.replace("/","") === "" ? 
+    "home" : props.location.pathname.replace("/","")
+
+    console.log(initialRoute)
+
     this.state = {
       sidebarOpen: false,
       easterEggUnlocked: false,
       easterEggSteps: [],
       letterType: "bounce",
-      currentRoute: props.location.pathname.replace("/",""),
+      currentRoute: initialRoute,
       isPopupOpen: false
     }
   }
